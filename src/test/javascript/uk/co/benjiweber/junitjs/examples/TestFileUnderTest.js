@@ -1,5 +1,4 @@
-load("src/test/resources/TestUtils.js");
-load("src/main/java/uk/co/benjiweber/junitjs/examples/FileUnderTest.js");
+loadResource("FileUnderTest.js");
 
 var stub = newStub();
 underTest.collaborator = stub;

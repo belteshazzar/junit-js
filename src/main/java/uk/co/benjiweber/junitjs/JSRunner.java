@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,10 @@ public class JSRunner extends Runner implements Filterable, Sortable  {
 
 	public JSRunner(Class<?> cls) {
 		this.cls = cls;
+		
+		
 		List<String> testNames = asList(cls.getAnnotation(Tests.class).value());
-		this.tests = findJSTests(testNames);
+		this.tests = findJSTests(cls,testNames);
 	}
 	
 	@Override
@@ -68,13 +71,16 @@ public class JSRunner extends Runner implements Filterable, Sortable  {
 		}
 	}
 	
-	private List<TestClass> findJSTests(List<String> testNames) {
+	private List<TestClass> findJSTests(Class<?> cls, List<String> testNames) {
 		
 		try {
-			ScriptEngine engine = getBestJavaScriptEngine();
+			ScriptEngineManager factory = new ScriptEngineManager();
+			ScriptEngine engine = factory.getEngineByName("nashorn");
+			loadTestUtilities(engine);
+			engine.put("loadResource",new ClassPathLoader(engine));
 			List<TestClass> testClasses = new ArrayList<TestClass>();
 			for (String name : testNames) {
-				testClasses.add(new TestClass(name, load(engine, name)));
+				testClasses.add(new TestClass(name, load(cls, engine, name)));
 			}
 			return testClasses;
 			
@@ -87,41 +93,38 @@ public class JSRunner extends Runner implements Filterable, Sortable  {
 		engine.eval(IOUtils.toString(JSRunner.class.getResource("TestUtils.js")));
 	}
 
-	public static class Loader {
-		
-		private final ScriptEngine rhino;
-
-		public Loader(ScriptEngine rhino) {
-			this.rhino = rhino;
-		}
-		
-		public void load(String filename) {
-			try {
-				rhino.eval(new FileReader(filename));
-			} catch (FileNotFoundException | ScriptException e) {
-				throw new RuntimeException(e);
-			}
-		}
+	@FunctionalInterface
+	public interface Loader {
+				
+		public void load(String filename) throws ScriptException;
 	}
 	
-	private ScriptEngine getBestJavaScriptEngine() throws ScriptException {
-		ScriptEngineManager factory = new ScriptEngineManager();
-		ScriptEngine nashorn = factory.getEngineByName("nashorn");
+	public class ClassPathLoader implements Loader {
+		private final ScriptEngine engine;
+		public ClassPathLoader(ScriptEngine engine) {
+			this.engine = engine;
+		}
+		@Override
+		public void load(String filename) throws ScriptException {
+			System.err.println("loading: " + filename);
+			System.err.println("using: " + cls);
+			URL r = cls.getResource(filename);
+			System.err.println("url: " + r);
+			String file = r.getFile();
+			System.err.println(file);
+			engine.eval("load(\"" + file.toString() + "\");");
+		}
 		
-		if (nashorn != null) return nashorn;
-		
-		final ScriptEngine rhino = factory.getEngineByName("JavaScript");
-		
-		rhino.put("Loader", new Loader(rhino));
-		rhino.eval("function load(filename) { Loader.load(filename); }");
-		
-		return rhino; 
 	}
 	
 	@SuppressWarnings("unchecked")
-	private List<TestCase> load(ScriptEngine engine, String name) throws ScriptException, IOException{
-		InputStream s = JSRunner.class.getResourceAsStream("/" + name);
-		return (List<TestCase>) engine.eval(IOUtils.toString(s));
+	private List<TestCase> load(Class<?> cls, ScriptEngine engine, String name) throws ScriptException, IOException{
+		System.err.println("load: " + name);
+		InputStream s = cls.getResourceAsStream(name);
+		System.err.println("input stream: " + s);
+		String src = IOUtils.toString(s);
+		System.err.println("src: " + src);
+		return (List<TestCase>) engine.eval(src);
         }
 
 	public void sort(Sorter sorter) {
