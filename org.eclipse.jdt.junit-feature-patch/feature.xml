@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="testfeature"
-      label="Testfeature"
-      version="1.0.0.qualifier">
+      id="junitjs"
+      label="junit js feature patch"
+      version="0.0.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -16,11 +16,15 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="org.eclipse.jdt" version="3.11.1.v20150904-0015" patch="true"/>
+   </requires>
+
    <plugin
          id="org.eclipse.jdt.junit"
          download-size="0"
          install-size="0"
-         version="4.0.0.dcw"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
