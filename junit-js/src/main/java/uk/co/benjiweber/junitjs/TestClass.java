@@ -1,5 +1,6 @@
 package uk.co.benjiweber.junitjs;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -62,8 +63,11 @@ public class TestClass {
 		ScriptEngine engine = factory.getEngineByName("nashorn");
 		engine.put("loadResource",new ClassPathLoader(engine));
 		loadTestUtilities(engine);
-		this.url = suiteClass.getResource(name).toString();
+		URL resourceUrl = suiteClass.getResource(name);
+		if (resourceUrl==null) throw new FileNotFoundException(name);
+		this.url = resourceUrl.toString();
 		InputStream s = suiteClass.getResourceAsStream(name);
+		if (s==null) throw new FileNotFoundException(name);
 		String src = IOUtils.toString(s);
 		String[] lines = src.split("\n");
 		engine.eval(src);
