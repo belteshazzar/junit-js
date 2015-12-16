@@ -1,9 +1,39 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>uk.co.benjiweber</groupId>
+	<groupId>com.belteshazzar</groupId>
 	<artifactId>junit-js</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+	<name>JUnit-JS</name>
+	<description>JavaScript JUnit Runner</description>
+	<url>https://github.com/belteshazzar/junit-js</url>
+	<licenses>
+		<license>
+			<distribution>repo</distribution>
+			<name>BSD 3-Clause</name>
+			<url>http://opensource.org/licenses/BSD-3-Clause</url>
+		</license>
+	</licenses>
+	<scm>
+		<developerConnection>scm:git:ssh://git@github.com/belteshazzar/junit-js.git</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<id>belteshazzar</id>
+			<name>daniel</name>
+			<email>daniel@belteshazzar.com</email>
+		</developer>
+	</developers>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jackson-version>2.6.3</jackson-version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -16,8 +46,13 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
 	</dependencies>
+
+	<organization>
+		<url>http://www.belteshazzar.com</url>
+		<name>belteshazzar</name>
+	</organization>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -29,19 +64,23 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.15</version>
-				<configuration>
-					<includes>
-						<include>**/*Tests.java</include>
-						<include>**/*Test.java</include>
-						<include>**/*Suite.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/Abstract*.java</exclude>
-					</excludes>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
+	<issueManagement>
+		<url>https://github.com/belteshazzar/junit-js/issues</url>
+	</issueManagement>
 </project>
+
