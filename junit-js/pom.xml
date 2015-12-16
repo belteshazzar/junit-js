@@ -82,7 +82,7 @@
 				<executions>
 					<execution>
 						<configuration>
-							<pomFileName>junit-js/pom.xml</pomFileName>
+							<pomFileName>junit-js/junit-js/pom.xml</pomFileName>
 						</configuration>
 					</execution>
 				</executions>
