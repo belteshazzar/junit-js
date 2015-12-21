@@ -57,3 +57,10 @@ To use with maven use the following dependencies (note that you also need to inc
 ## Non-Maven Download
 
 For non-Maven use cases, you download jars from [Central Maven repository](http://repo1.maven.org/maven2/com/belteshazzar/junit-js/1.0.0/junit-js-1.0.0.jar).
+
+# Eclipse Plugin
+
+
+```
+http://junit-js.belteshazzar.com/
+```
