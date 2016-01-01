@@ -5,9 +5,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <dependencies>
   	<dependency>
-  		<groupId>uk.co.benjiweber</groupId>
+  		<groupId>com.belteshazzar</groupId>
   		<artifactId>junit-js</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
+  		<version>1.0.0</version>
   	</dependency>
   	<dependency>
   		<groupId>junit</groupId>

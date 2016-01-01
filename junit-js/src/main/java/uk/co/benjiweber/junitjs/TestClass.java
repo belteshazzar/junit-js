@@ -61,7 +61,7 @@ public class TestClass {
 	private List<TestCase> load(Class<?> suiteClass) throws ScriptException, IOException, NoSuchMethodException, URISyntaxException{
 		ScriptEngineManager factory = new ScriptEngineManager();
 		ScriptEngine engine = factory.getEngineByName("nashorn");
-		engine.put("loadResource",new ClassPathLoader(engine));
+		engine.put("include",new ClassPathLoader(engine));
 		loadTestUtilities(engine);
 		URL resourceUrl = suiteClass.getResource(name);
 		if (resourceUrl==null) throw new FileNotFoundException(name);
@@ -81,12 +81,8 @@ public class TestClass {
 					public void run() {
 						try {
 							invocable.invokeFunction(key);
-						} catch (NoSuchMethodException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ScriptException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						} catch (Exception e) {
+							throw new RuntimeException(e);
 						}
 					}
 				}));
@@ -105,6 +101,7 @@ public class TestClass {
 
 	private void loadTestUtilities(ScriptEngine engine) throws ScriptException,IOException {
 		engine.eval(IOUtils.toString(JSRunner.class.getResource("TestUtils.js")));
+		engine.eval(IOUtils.toString(JSRunner.class.getResource("Assert.js")));
 	}
 
 	@FunctionalInterface

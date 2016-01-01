@@ -2,7 +2,6 @@ package uk.co.benjiweber.junitjs.examples;
 
 import org.junit.runner.RunWith;
 
-import junit.framework.TestCase;
 import uk.co.benjiweber.junitjs.JSRunner;
 import uk.co.benjiweber.junitjs.Tests;
 
@@ -12,9 +11,8 @@ import uk.co.benjiweber.junitjs.Tests;
 	"SimpleJSTest.js",
 	"/uk/co/benjiweber/junitjs/other/FredsJSTest.js",
 	"../other/FredsJSTest2.js",
-	"sub/SimpleJSTest.js",
-	"/sample/DepTest.js"
+	"sub/SimpleJSTest.js"
 })
-public class ExampleTestSuite extends TestCase {
+public class ExampleTestSuite	 {
 
 }
